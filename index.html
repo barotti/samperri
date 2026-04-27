@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Marco Rossi — Fotografo & Videomaker</title>
+  <meta name="description" content="Portfolio di Marco Rossi, fotografo e videomaker. Milano · Roma · Ovunque tu sia." />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    #portfolio-root {
+      background: #000;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+      overflow-y: auto;
+      min-height: 100vh;
+      scroll-behavior: smooth;
+    }
+    .section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+      position: relative;
+    }
+    .hero {
+      background: #000;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      color: #86868b;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .hero-title {
+      font-size: clamp(42px, 8vw, 72px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s;
+    }
+    .hero-sub {
+      font-size: 19px;
+      color: #86868b;
+      font-weight: 400;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 1s ease 0.8s;
+    }
+    .scroll-hint span { font-size: 12px; color: #86868b; letter-spacing: 0.1em; }
+    .scroll-arrow {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, #86868b, transparent);
+      animation: pulse-down 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse-down {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.1); }
+    }
+    .visible .hero-eyebrow,
+    .visible .hero-title,
+    .visible .hero-sub,
+    .visible .scroll-hint { opacity: 1; transform: translateY(0); }
+
+    .work-section { background: #000; border-top: 0.5px solid #1d1d1f; }
+    .section-label {
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: #86868b;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 800px;
+    }
+    .card {
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(32px) scale(0.97);
+      transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+    .card:nth-child(1) { transition-delay: 0.05s; }
+    .card:nth-child(2) { transition-delay: 0.15s; }
+    .card:nth-child(3) { transition-delay: 0.25s; }
+    .card:hover { transform: scale(1.03) !important; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .card-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+      position: relative;
+    }
+    .card-img-bg {
+      position: absolute; inset: 0;
+      border-radius: 16px;
+    }
+    .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
+      border-radius: 16px;
+    }
+    .card-text { position: relative; z-index: 1; }
+    .card-title { font-size: 17px; font-weight: 500; margin-bottom: 4px; }
+    .card-cat { font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; }
+
+    .about-section { background: #000; border-top: 0.5px solid #1d1d1f; text-align: center; }
+    .about-title {
+      font-size: clamp(28px, 5vw, 52px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .about-body {
+      font-size: 17px;
+      line-height: 1.7;
+      color: #86868b;
+      max-width: 520px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s;
+    }
+    .cta-section {
+      background: #000;
+      border-top: 0.5px solid #1d1d1f;
+      text-align: center;
+      gap: 32px;
+    }
+    .cta-label {
+      font-size: clamp(22px, 4vw, 40px);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 14px 36px;
+      border-radius: 980px;
+      background: #fff;
+      color: #000;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s, background 0.2s;
+    }
+    .cta-btn:hover { background: #d1d1d6; }
+    .in-view .section-label,
+    .in-view .card,
+    .in-view .about-title,
+    .in-view .about-body,
+    .in-view .cta-label,
+    .in-view .cta-btn { opacity: 1; transform: translateY(0) scale(1); }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 40px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(20px);
+      z-index: 100;
+      border-bottom: 0.5px solid #1d1d1f;
+    }
+    .nav-name { font-size: 15px; font-weight: 500; letter-spacing: 0.01em; }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-link { font-size: 13px; color: #86868b; cursor: pointer; transition: color 0.2s; text-decoration: none; }
+    .nav-link:hover { color: #fff; }
+  </style>
+</head>
+<body>
+  <div id="portfolio-root">
+    <nav class="nav">
+      <span class="nav-name">Marco Rossi</span>
+      <div class="nav-links">
+        <a class="nav-link" href="#work">Lavori</a>
+        <a class="nav-link" href="#about">Chi sono</a>
+        <a class="nav-link" href="#contact">Contatti</a>
+      </div>
+    </nav>
+
+    <section class="section hero" id="hero">
+      <p class="hero-eyebrow">Fotografo & Videomaker</p>
+      <h1 class="hero-title">Cattura<br>ogni momento.</h1>
+      <p class="hero-sub">Milano · Roma · Ovunque tu sia</p>
+      <div class="scroll-hint">
+        <span>Scorri</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <section class="section work-section" id="work">
+      <p class="section-label">Progetti selezionati</p>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-img">
+            <div class="card-img-bg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);"></div>
+            <div class="card-overlay"></div>
+            <div class="card-text">
+              <p class="card-title">Ritratti urbani</p>
+              <p class="card-cat">FOTOGRAFIA</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img">
+            <div class="card-img-bg" style="background: linear-gradient(135deg, #1b2838 0%, #2a475e 50%, #66c0f4 100%);"></div>
+            <div class="card-overlay"></div>
+            <div class="card-text">
+              <p class="card-title">Brand film 2024</p>
+              <p class="card-cat">VIDEO</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-img">
+            <div class="card-img-bg" style="background: linear-gradient(135deg, #2d1b33 0%, #4a1942 50%, #8b2252 100%);"></div>
+            <div class="card-overlay"></div>
+            <div class="card-text">
+              <p class="card-title">Matrimoni</p>
+              <p class="card-cat">FOTOGRAFIA · VIDEO</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about">
+      <h2 class="about-title">Visione.<br>Luce. Emozione.</h2>
+      <p class="about-body">Racconto storie attraverso immagini e video. Ogni progetto è un viaggio unico, dove tecnica e sensibilità si incontrano per creare qualcosa di indimenticabile.</p>
+    </section>
+
+    <section class="section cta-section" id="contact">
+      <p class="cta-label">Lavoriamo insieme.</p>
+      <a class="cta-btn" href="mailto:info@marcorossi.it">Scrivimi ↗</a>
+    </section>
+  </div>
+
+  <script>
+    setTimeout(() => document.querySelector('.hero').classList.add('visible'), 100);
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('in-view');
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.work-section, .about-section, .cta-section').forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
