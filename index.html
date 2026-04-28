@@ -4,290 +4,463 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Marco Rossi — Fotografo & Videomaker</title>
-  <meta name="description" content="Portfolio di Marco Rossi, fotografo e videomaker. Milano · Roma · Ovunque tu sia." />
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; }
-    #portfolio-root {
-      background: #000;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-      overflow-y: auto;
-      min-height: 100vh;
-      scroll-behavior: smooth;
-    }
-    .section {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 40px;
-      position: relative;
-    }
-    .hero {
-      background: #000;
-      text-align: center;
-    }
-    .hero-eyebrow {
-      font-size: 13px;
-      letter-spacing: 0.15em;
-      color: #86868b;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .hero-title {
-      font-size: clamp(42px, 8vw, 72px);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.05;
-      margin-bottom: 18px;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.9s ease 0.1s, transform 0.9s ease 0.1s;
-    }
-    .hero-sub {
-      font-size: 19px;
-      color: #86868b;
-      font-weight: 400;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease 0.25s, transform 0.8s ease 0.25s;
-    }
-    .scroll-hint {
-      position: absolute;
-      bottom: 30px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      opacity: 0;
-      transition: opacity 1s ease 0.8s;
-    }
-    .scroll-hint span { font-size: 12px; color: #86868b; letter-spacing: 0.1em; }
-    .scroll-arrow {
-      width: 1px;
-      height: 40px;
-      background: linear-gradient(to bottom, #86868b, transparent);
-      animation: pulse-down 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse-down {
-      0%, 100% { opacity: 0.3; transform: scaleY(1); }
-      50% { opacity: 1; transform: scaleY(1.1); }
-    }
-    .visible .hero-eyebrow,
-    .visible .hero-title,
-    .visible .hero-sub,
-    .visible .scroll-hint { opacity: 1; transform: translateY(0); }
-
-    .work-section { background: #000; border-top: 0.5px solid #1d1d1f; }
-    .section-label {
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      color: #86868b;
-      text-transform: uppercase;
-      margin-bottom: 48px;
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      width: 100%;
-      max-width: 800px;
-    }
-    .card {
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(32px) scale(0.97);
-      transition: opacity 0.7s ease, transform 0.7s ease, box-shadow 0.3s ease;
-      position: relative;
-    }
-    .card:nth-child(1) { transition-delay: 0.05s; }
-    .card:nth-child(2) { transition-delay: 0.15s; }
-    .card:nth-child(3) { transition-delay: 0.25s; }
-    .card:hover { transform: scale(1.03) !important; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
-    .card-img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      display: flex;
-      align-items: flex-end;
-      padding: 20px;
-      position: relative;
-    }
-    .card-img-bg {
-      position: absolute; inset: 0;
-      border-radius: 16px;
-    }
-    .card-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 60%);
-      border-radius: 16px;
-    }
-    .card-text { position: relative; z-index: 1; }
-    .card-title { font-size: 17px; font-weight: 500; margin-bottom: 4px; }
-    .card-cat { font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 0.08em; }
-
-    .about-section { background: #000; border-top: 0.5px solid #1d1d1f; text-align: center; }
-    .about-title {
-      font-size: clamp(28px, 5vw, 52px);
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      line-height: 1.1;
-      margin-bottom: 24px;
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .about-body {
-      font-size: 17px;
-      line-height: 1.7;
-      color: #86868b;
-      max-width: 520px;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease 0.15s, transform 0.8s ease 0.15s;
-    }
-    .cta-section {
-      background: #000;
-      border-top: 0.5px solid #1d1d1f;
-      text-align: center;
-      gap: 32px;
-    }
-    .cta-label {
-      font-size: clamp(22px, 4vw, 40px);
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .cta-btn {
-      display: inline-block;
-      padding: 14px 36px;
-      border-radius: 980px;
-      background: #fff;
-      color: #000;
-      font-size: 15px;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s, background 0.2s;
-    }
-    .cta-btn:hover { background: #d1d1d6; }
-    .in-view .section-label,
-    .in-view .card,
-    .in-view .about-title,
-    .in-view .about-body,
-    .in-view .cta-label,
-    .in-view .cta-btn { opacity: 1; transform: translateY(0) scale(1); }
-
-    .nav {
-      position: sticky;
-      top: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 40px;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(20px);
-      z-index: 100;
-      border-bottom: 0.5px solid #1d1d1f;
-    }
-    .nav-name { font-size: 15px; font-weight: 500; letter-spacing: 0.01em; }
-    .nav-links { display: flex; gap: 28px; }
-    .nav-link { font-size: 13px; color: #86868b; cursor: pointer; transition: color 0.2s; text-decoration: none; }
-    .nav-link:hover { color: #fff; }
-  </style>
+  <meta name="description" content="Portfolio di Marco Rossi, fotografo e videomaker. Milano · Roma." />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-<body>
-  <div id="portfolio-root">
-    <nav class="nav">
-      <span class="nav-name">Marco Rossi</span>
-      <div class="nav-links">
-        <a class="nav-link" href="#work">Lavori</a>
-        <a class="nav-link" href="#about">Chi sono</a>
-        <a class="nav-link" href="#contact">Contatti</a>
-      </div>
-    </nav>
+<body class="is-loading">
 
-    <section class="section hero" id="hero">
-      <p class="hero-eyebrow">Fotografo & Videomaker</p>
-      <h1 class="hero-title">Cattura<br>ogni momento.</h1>
-      <p class="hero-sub">Milano · Roma · Ovunque tu sia</p>
-      <div class="scroll-hint">
-        <span>Scorri</span>
-        <div class="scroll-arrow"></div>
-      </div>
-    </section>
+  <!-- SCROLL PROGRESS -->
+  <div id="scrollProgress"></div>
 
-    <section class="section work-section" id="work">
-      <p class="section-label">Progetti selezionati</p>
-      <div class="cards-grid">
-        <div class="card">
-          <div class="card-img">
-            <div class="card-img-bg" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);"></div>
-            <div class="card-overlay"></div>
-            <div class="card-text">
-              <p class="card-title">Ritratti urbani</p>
-              <p class="card-cat">FOTOGRAFIA</p>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-img">
-            <div class="card-img-bg" style="background: linear-gradient(135deg, #1b2838 0%, #2a475e 50%, #66c0f4 100%);"></div>
-            <div class="card-overlay"></div>
-            <div class="card-text">
-              <p class="card-title">Brand film 2024</p>
-              <p class="card-cat">VIDEO</p>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-img">
-            <div class="card-img-bg" style="background: linear-gradient(135deg, #2d1b33 0%, #4a1942 50%, #8b2252 100%);"></div>
-            <div class="card-overlay"></div>
-            <div class="card-text">
-              <p class="card-title">Matrimoni</p>
-              <p class="card-cat">FOTOGRAFIA · VIDEO</p>
-            </div>
-          </div>
+  <!-- CURSOR -->
+  <div class="cursor" id="cur"></div>
+  <div class="cursor-ring" id="curRing"></div>
+
+  <!-- PRELOADER -->
+  <div id="preloader">
+    <div class="pl-lines" id="plLines"></div>
+    <div class="pl-inner">
+      <div class="pl-name">
+        <div class="pl-name-word"><span>Marco</span></div>
+        &nbsp;
+        <div class="pl-name-word"><span>Rossi</span></div>
+      </div>
+      <div class="pl-counter" id="plCounter">
+        <p class="pl-load-label">Caricamento</p>
+        <div class="pl-pct-row">
+          <span class="pl-count-num" id="plCountNum">0</span>
+          <span class="pl-count-pct" id="plCountPct">%</span>
         </div>
       </div>
-    </section>
-
-    <section class="section about-section" id="about">
-      <h2 class="about-title">Visione.<br>Luce. Emozione.</h2>
-      <p class="about-body">Racconto storie attraverso immagini e video. Ogni progetto è un viaggio unico, dove tecnica e sensibilità si incontrano per creare qualcosa di indimenticabile.</p>
-    </section>
-
-    <section class="section cta-section" id="contact">
-      <p class="cta-label">Lavoriamo insieme.</p>
-      <a class="cta-btn" href="mailto:info@marcorossi.it">Scrivimi ↗</a>
-    </section>
+      <div class="pl-bar-wrap">
+        <div class="pl-bar" id="plBar"></div>
+      </div>
+    </div>
+    <div class="pl-panel top" id="plTop"></div>
+    <div class="pl-panel bot" id="plBot"></div>
   </div>
 
-  <script>
-    setTimeout(() => document.querySelector('.hero').classList.add('visible'), 100);
+  <!-- FILMSTRIP -->
+  <div id="filmstrip">
+    <div class="fs-track" id="fsTrack"></div>
+    <div class="fs-skip" id="fsSkip">Skip ↗</div>
+    <div class="fs-dots" id="fsDots"></div>
+  </div>
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) e.target.classList.add('in-view');
-      });
-    }, { threshold: 0.15 });
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <a class="nav-logo" href="#">MR.</a>
+    <div class="nav-center" id="navCenter">
+      <a class="nav-link" href="#work">Lavori</a>
+      <a class="nav-link" href="#services">Servizi</a>
+      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link" href="#faq">FAQ</a>
+    </div>
+    <a class="nav-cta" href="#contact" id="navCta">Parliamo ↗</a>
+  </nav>
 
-    document.querySelectorAll('.work-section, .about-section, .cta-section').forEach(s => observer.observe(s));
-  </script>
+  <!-- SITE -->
+  <div id="site">
+
+    <!-- ── HERO ── -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot"></span>
+          Disponibile per nuovi progetti · 2024
+        </div>
+        <h1 class="hero-title" id="heroTitle">
+          Ogni Frame,<br>Una Storia.
+        </h1>
+        <p class="hero-sub">Fotografia e video di alta qualità. Racconto l'essenza di ogni momento — matrimoni, brand, ritratti e tutto ciò che merita di essere ricordato.</p>
+        <div class="hero-actions">
+          <a href="#work" class="btn btn-primary">Esplora il lavoro</a>
+          <a href="#reel" class="btn btn-ghost">
+            <span class="btn-play-icon">
+              <svg viewBox="0 0 12 14" fill="currentColor" width="10"><polygon points="0,0 12,7 0,14"/></svg>
+            </span>
+            Guarda il Reel
+          </a>
+        </div>
+      </div>
+      <div class="hero-reel" id="heroReel">
+        <div class="reel-bg" style="background:linear-gradient(160deg,#070b18 0%,#0d1530 50%,#162040 100%);"></div>
+        <div class="reel-grain"></div>
+        <div class="reel-center">
+          <div class="reel-play-btn">
+            <svg viewBox="0 0 14 16" fill="white" width="16"><polygon points="0,0 14,8 0,16"/></svg>
+          </div>
+          <p class="reel-play-label">Showreel 2024</p>
+        </div>
+        <div class="reel-meta">
+          <span class="reel-tag">4K · 03:24</span>
+          <span class="reel-loc">Milano, Italia</span>
+        </div>
+      </div>
+      <div class="scroll-cue" id="scrollCue">
+        <span class="scroll-cue-text">Scorri</span>
+        <div class="scroll-cue-line"></div>
+      </div>
+    </section>
+
+    <!-- ── MARQUEE ── -->
+    <div class="marquee-section">
+      <div class="marquee-track">
+        <span class="marquee-item">Brand Film</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Matrimoni</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Ritratto</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Corporate</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Fashion</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Reportage</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Brand Film</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Matrimoni</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Ritratto</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Corporate</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Fashion</span><span class="marquee-sep">✦</span>
+        <span class="marquee-item">Reportage</span><span class="marquee-sep">✦</span>
+      </div>
+    </div>
+
+    <!-- ── WORK ── -->
+    <section class="work-section" id="work">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Progetti selezionati</span>
+            <h2 class="section-title">Il mio lavoro</h2>
+          </div>
+          <a class="link-arrow" href="#">Vedi tutti ↗</a>
+        </div>
+        <div class="work-grid">
+          <!-- 1: tall (spans 2 rows) -->
+          <div class="work-card work-card--tall">
+            <div class="card-bg" style="background:linear-gradient(160deg,#07091a,#0f1540,#1a2560);"></div>
+            <div class="card-overlay"></div>
+            <div class="card-inner">
+              <span class="card-tag">Fotografia</span>
+              <div class="card-foot">
+                <div>
+                  <p class="card-client">Milano, 2024</p>
+                  <h3 class="card-title">Ritratti Urbani</h3>
+                </div>
+                <span class="card-arrow">↗</span>
+              </div>
+            </div>
+            <div class="card-hover-play"><div class="play-circle"><svg viewBox="0 0 14 16" fill="white" width="14"><polygon points="0,0 14,8 0,16"/></svg></div></div>
+          </div>
+          <!-- 2 -->
+          <div class="work-card">
+            <div class="card-bg" style="background:linear-gradient(160deg,#190600,#3d1200,#6b2000);"></div>
+            <div class="card-overlay"></div>
+            <div class="card-inner">
+              <span class="card-tag">Video</span>
+              <div class="card-foot">
+                <div>
+                  <p class="card-client">Brand Campaign</p>
+                  <h3 class="card-title">Brand Film 2024</h3>
+                </div>
+                <span class="card-duration">▶ 02:48</span>
+              </div>
+            </div>
+            <div class="card-hover-play"><div class="play-circle"><svg viewBox="0 0 14 16" fill="white" width="14"><polygon points="0,0 14,8 0,16"/></svg></div></div>
+          </div>
+          <!-- 3 -->
+          <div class="work-card">
+            <div class="card-bg" style="background:linear-gradient(160deg,#0c0018,#200038,#380060);"></div>
+            <div class="card-overlay"></div>
+            <div class="card-inner">
+              <span class="card-tag">Matrimonio</span>
+              <div class="card-foot">
+                <div>
+                  <p class="card-client">Venezia, 2024</p>
+                  <h3 class="card-title">Laura & Marco</h3>
+                </div>
+                <span class="card-duration">▶ 05:12</span>
+              </div>
+            </div>
+            <div class="card-hover-play"><div class="play-circle"><svg viewBox="0 0 14 16" fill="white" width="14"><polygon points="0,0 14,8 0,16"/></svg></div></div>
+          </div>
+          <!-- 4: wide (spans 2 cols) -->
+          <div class="work-card work-card--wide">
+            <div class="card-bg" style="background:linear-gradient(160deg,#001508,#002e12,#004a1e);"></div>
+            <div class="card-overlay"></div>
+            <div class="card-inner">
+              <span class="card-tag">Fashion</span>
+              <div class="card-foot">
+                <div>
+                  <p class="card-client">Studio Milano</p>
+                  <h3 class="card-title">Collezione Autunno / Inverno</h3>
+                </div>
+                <span class="card-arrow">↗</span>
+              </div>
+            </div>
+            <div class="card-hover-play"><div class="play-circle"><svg viewBox="0 0 14 16" fill="white" width="14"><polygon points="0,0 14,8 0,16"/></svg></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SERVICES ── -->
+    <section class="services-section" id="services">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Come lavoro</span>
+            <h2 class="section-title">Dal concetto<br>alla consegna.</h2>
+          </div>
+        </div>
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-top">
+              <span class="service-num">01</span>
+              <span class="service-icon">◎</span>
+            </div>
+            <h3 class="service-title">Pre-Produzione</h3>
+            <p class="service-desc">Pianificazione creativa, scouting location e tutto ciò che serve prima di scattare il primo frame.</p>
+            <ul class="service-list">
+              <li>Consulenza creativa</li>
+              <li>Scouting location</li>
+              <li>Storyboard & moodboard</li>
+              <li>Pianificazione del set</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-top">
+              <span class="service-num">02</span>
+              <span class="service-icon">◉</span>
+            </div>
+            <h3 class="service-title">Produzione</h3>
+            <p class="service-desc">Sul set con attrezzatura professionale per catturare ogni momento con precisione e sensibilità.</p>
+            <ul class="service-list">
+              <li>Fotografia professionale</li>
+              <li>Riprese video 4K</li>
+              <li>Illuminazione da studio</li>
+              <li>Direzione artistica</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-top">
+              <span class="service-num">03</span>
+              <span class="service-icon">◈</span>
+            </div>
+            <h3 class="service-title">Post-Produzione</h3>
+            <p class="service-desc">Editing, color grading e ritocco per un risultato finale che supera le aspettative.</p>
+            <ul class="service-list">
+              <li>Selezione & editing</li>
+              <li>Color grading cinematico</li>
+              <li>Ritocco professionale</li>
+              <li>Montaggio video</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SPECIALIZZAZIONI ── -->
+    <div class="industries-section">
+      <div class="container">
+        <div class="industries-inner">
+          <span class="eyebrow">Specializzazioni</span>
+          <div class="industries-pills">
+            <span class="pill">Matrimoni</span>
+            <span class="pill pill--active">Brand Film</span>
+            <span class="pill">Ritratto</span>
+            <span class="pill">Corporate</span>
+            <span class="pill pill--active">Fashion</span>
+            <span class="pill">Reportage</span>
+            <span class="pill">Documentari</span>
+            <span class="pill">Live Event</span>
+            <span class="pill">Food & Product</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── STATS ── -->
+    <div class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-num" data-target="200" data-suffix="+">0</div>
+            <p class="stat-label">Progetti completati</p>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="8" data-suffix="">0</div>
+            <p class="stat-label">Anni di esperienza</p>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="40" data-suffix="+">0</div>
+            <p class="stat-label">Clienti soddisfatti</p>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <div class="stat-num" data-target="12" data-suffix="">0</div>
+            <p class="stat-label">Premi vinti</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ABOUT ── -->
+    <section class="about-section" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-left">
+            <span class="eyebrow">Chi sono</span>
+            <h2 class="about-title">Racconto storie attraverso la luce.</h2>
+            <p class="about-body">Fotografo e videomaker con sede a Milano e Roma. Ogni progetto è un'opportunità unica — dove la tecnica incontra la sensibilità.</p>
+            <p class="about-body">Lavoro con brand, coppie, artisti e aziende che vogliono comunicare attraverso immagini che rimangono.</p>
+            <a href="#contact" class="btn btn-primary about-btn">Lavoriamo insieme ↗</a>
+          </div>
+          <div class="about-right">
+            <div class="about-img-wrap">
+              <div class="about-img" style="background:linear-gradient(160deg,#080c1a,#122040,#1e3060);"></div>
+              <div class="about-badge">
+                <span class="about-badge-num">8+</span>
+                <span class="about-badge-text">anni di<br>esperienza</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TESTIMONIALS ── -->
+    <section class="testimonials-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Testimonianze</span>
+            <h2 class="section-title">Cosa dicono<br>i clienti.</h2>
+          </div>
+        </div>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">"Marco ha trasformato il nostro matrimonio in un racconto visivo straordinario. Ogni foto è un'emozione cristallizzata nel tempo."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background:linear-gradient(135deg,#1a1a3e,#2a2a6e);"></div>
+              <div>
+                <p class="author-name">Sofia Martini</p>
+                <p class="author-role">Sposa · Venezia 2024</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">"Il brand film realizzato per noi ha superato ogni aspettativa. Professionale, creativo e puntuale in ogni fase del progetto."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background:linear-gradient(135deg,#1a0800,#4d1800);"></div>
+              <div>
+                <p class="author-name">Luca Ferretti</p>
+                <p class="author-role">CEO · Studio Ferretti</p>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="stars">★★★★★</div>
+            <p class="quote">"Collaborare con Marco è stata un'esperienza rara. Cattura l'essenza del momento con un occhio davvero fuori dal comune."</p>
+            <div class="testimonial-author">
+              <div class="author-avatar" style="background:linear-gradient(135deg,#001a0a,#004d22);"></div>
+              <div>
+                <p class="author-name">Anna Bianchi</p>
+                <p class="author-role">Art Director · Milano</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FAQ ── -->
+    <section class="faq-section" id="faq">
+      <div class="container">
+        <div class="faq-grid">
+          <div class="faq-left">
+            <span class="eyebrow">FAQ</span>
+            <h2 class="section-title">Domande<br>frequenti.</h2>
+          </div>
+          <div class="faq-list" id="faqList">
+            <div class="faq-item">
+              <button class="faq-q"><span>Quali sono i tempi di consegna?</span><span class="faq-icon">+</span></button>
+              <div class="faq-a"><p>Per la fotografia, la consegna avviene entro 2–3 settimane dalla sessione. Per i video, il montaggio finale è pronto entro 4–6 settimane dalla ripresa.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q"><span>Lavori anche fuori Milano?</span><span class="faq-icon">+</span></button>
+              <div class="faq-a"><p>Assolutamente sì. Sono basato tra Milano e Roma e disponibile a viaggiare in tutta Italia e all'estero per i progetti giusti.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q"><span>Come funziona il processo di prenotazione?</span><span class="faq-icon">+</span></button>
+              <div class="faq-a"><p>Iniziamo con una call conoscitiva gratuita. Poi preparo un preventivo su misura. Un acconto del 30% conferma la data nel calendario.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q"><span>Fornisci i file RAW delle fotografie?</span><span class="faq-icon">+</span></button>
+              <div class="faq-a"><p>I file RAW non sono inclusi nei pacchetti standard. Consegno immagini selezionate e ritoccate in alta risoluzione. I RAW possono essere acquistati separatamente.</p></div>
+            </div>
+            <div class="faq-item">
+              <button class="faq-q"><span>Posso usare le foto per uso commerciale?</span><span class="faq-icon">+</span></button>
+              <div class="faq-a"><p>Dipende dal contratto. I pacchetti standard includono l'uso personale e editoriale. Per campagne commerciali o pubblicitarie esistono licenze dedicate.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ── -->
+    <section class="cta-section" id="contact">
+      <div class="container">
+        <div class="cta-inner">
+          <span class="eyebrow">Iniziamo</span>
+          <h2 class="cta-title">Hai un progetto<br>in mente?</h2>
+          <p class="cta-sub">Raccontami la tua idea. Rispondo entro 24 ore.</p>
+          <a class="btn btn-primary btn-large cta-btn-main" href="mailto:info@marcorossi.it">Scrivimi ↗</a>
+          <p class="cta-email-raw">info@marcorossi.it</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <span class="footer-logo">MR.</span>
+            <p class="footer-tagline">Fotografo & Videomaker<br>Milano · Roma</p>
+          </div>
+          <div class="footer-links">
+            <div class="footer-col">
+              <p class="footer-col-label">Navigazione</p>
+              <a href="#work">Lavori</a>
+              <a href="#services">Servizi</a>
+              <a href="#about">About</a>
+              <a href="#contact">Contatti</a>
+            </div>
+            <div class="footer-col">
+              <p class="footer-col-label">Contatti</p>
+              <a href="mailto:info@marcorossi.it">info@marcorossi.it</a>
+              <a href="tel:+393331234567">+39 333 123 4567</a>
+            </div>
+            <div class="footer-col">
+              <p class="footer-col-label">Social</p>
+              <a href="#">Instagram</a>
+              <a href="#">LinkedIn</a>
+              <a href="#">Behance</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2024 Marco Rossi. Tutti i diritti riservati.</span>
+          <span>P.IVA 12345678901</span>
+        </div>
+      </div>
+    </footer>
+
+  </div><!-- /#site -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>
