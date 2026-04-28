@@ -1,20 +1,24 @@
 gsap.registerPlugin(ScrollTrigger);
 
-/* ─── CURSOR ─── */
+/* ─── CURSOR (desktop only) ─── */
+const isMobile = window.matchMedia('(max-width: 767px)').matches;
 const cur     = document.getElementById('cur');
 const curRing = document.getElementById('curRing');
 let mx = 0, my = 0, rx = 0, ry = 0;
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  gsap.to(cur, { x: mx, y: my, duration: .08, ease: 'power2.out' });
-});
-(function tickRing() {
-  rx += (mx - rx) * .09; ry += (my - ry) * .09;
-  gsap.set(curRing, { x: rx, y: ry });
-  requestAnimationFrame(tickRing);
-})();
+if (!isMobile) {
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    gsap.to(cur, { x: mx, y: my, duration: .08, ease: 'power2.out' });
+  });
+  (function tickRing() {
+    rx += (mx - rx) * .09; ry += (my - ry) * .09;
+    gsap.set(curRing, { x: rx, y: ry });
+    requestAnimationFrame(tickRing);
+  })();
+}
 function cursorHover(els) {
+  if (isMobile) return;
   els.forEach(el => {
     el.addEventListener('mouseenter', () => { cur.classList.add('expanded'); curRing.classList.add('expanded'); });
     el.addEventListener('mouseleave', () => { cur.classList.remove('expanded'); curRing.classList.remove('expanded'); });
@@ -158,23 +162,24 @@ function initScroll() {
     scrollTrigger: { trigger: 'body', start: 'top top', end: 'bottom bottom', scrub: 0 }
   });
 
-  // 2 ── SCROLL VELOCITY SKEW
-  // Quando scrolli velocemente, #site si inclina leggermente poi springback
-  const skewProxy = { skew: 0 };
-  const skewSetter = gsap.quickSetter('#site', 'skewY', 'deg');
-  const clamp = gsap.utils.clamp(-3, 3);
-  ScrollTrigger.create({
-    onUpdate(self) {
-      const skew = clamp(self.getVelocity() / -600);
-      if (Math.abs(skew) > Math.abs(skewProxy.skew)) {
-        skewProxy.skew = skew;
-        gsap.to(skewProxy, {
-          skew: 0, duration: .9, ease: 'power3.out',
-          onUpdate() { skewSetter(skewProxy.skew); }
-        });
+  // 2 ── SCROLL VELOCITY SKEW (desktop only — touch inertia produce valori estremi)
+  if (!isMobile) {
+    const skewProxy = { skew: 0 };
+    const skewSetter = gsap.quickSetter('#site', 'skewY', 'deg');
+    const clamp = gsap.utils.clamp(-3, 3);
+    ScrollTrigger.create({
+      onUpdate(self) {
+        const skew = clamp(self.getVelocity() / -600);
+        if (Math.abs(skew) > Math.abs(skewProxy.skew)) {
+          skewProxy.skew = skew;
+          gsap.to(skewProxy, {
+            skew: 0, duration: .9, ease: 'power3.out',
+            onUpdate() { skewSetter(skewProxy.skew); }
+          });
+        }
       }
-    }
-  });
+    });
+  }
 
   // 3 ── HERO PARALLAX scrub — content sale e svanisce, reel zooma
   gsap.to('.hero-content', {
